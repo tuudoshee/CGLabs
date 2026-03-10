@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12MeshletRender.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\MeshletMS.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\MeshletPS.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
