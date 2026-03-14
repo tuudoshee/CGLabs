@@ -1,6 +1,6 @@
 Texture2D gInputImage : register(t0);
-Texture2D gDepthMap   : register(t1);
-Texture2D gNormalMap  : register(t2);
+Texture2D gDepthMap : register(t1);
+Texture2D gVelocityMap : register(t2);
 
 SamplerState gSampler : register(s0);
 
@@ -93,29 +93,5 @@ float4 LensBlur(float2 texCoord, float depth)
 float4 PS(VertexOut pin) : SV_Target
 {
     uint2 pixelC = pin.PosH.xy;
-    float4 color = gInputImage.Load(int3(pixelC, 0));
-    
-    if (gEffectIntensity <= 0.0f)
-        return color;
-    
-    float depth = gDepthMap.Load(int3(pixelC, 0)).w;
-    
-    switch (gEffectType)
-    {
-        case 0: // Lens blur only
-            return LensBlur(pin.TexC, depth);
-            
-        case 1: // Chromatic Aberration only
-            return lerp(color,
-                      ChromaticAberration(pin.TexC, gChromaticIntensity, gChromaticDirection),
-                      gEffectIntensity);
-            
-        case 2: // Combined
-            float4 blurred = LensBlur(pin.TexC, depth);
-            float4 chromatic = ChromaticAberration(pin.TexC, gChromaticIntensity, gChromaticDirection);
-            return lerp(color, lerp(blurred, chromatic, 0.5f), gEffectIntensity);
-            
-        default:
-            return color;
-    }
+    return gInputImage.Load(int3(pixelC, 0));
 }

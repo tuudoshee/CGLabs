@@ -847,8 +847,8 @@ void DX12App::UpdateMainPassCB(const GameTimer& gt)
 	if (bTAAEnabled)
 		mMainPassCB.JitterOffset =
 	{
-		7.0f * Halton(currentFrame, 2) / (float)mClientWidth,
-		7.0f * Halton(currentFrame, 3) / (float)mClientHeight
+		0.5f * Halton(currentFrame, 2) / (float)mClientWidth,
+		0.5f * Halton(currentFrame, 3) / (float)mClientHeight
 	};
 	else
 		mMainPassCB.JitterOffset = { 0, 0 };
@@ -1846,12 +1846,12 @@ void DX12App::DrawPostProcess()
 	);
 	mCommandList->SetGraphicsRootDescriptorTable(1, depthHandle);
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE normalHandle(
+	CD3DX12_GPU_DESCRIPTOR_HANDLE velocityHandle(
 		mSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart(),
-		mGBuffer->Channel0SRVHeapIndex + 2,
+		mGBuffer->Channel0SRVHeapIndex + 5,
 		mCbvSrvDescriptorSize
 	);
-	mCommandList->SetGraphicsRootDescriptorTable(2, normalHandle);
+	mCommandList->SetGraphicsRootDescriptorTable(2, velocityHandle);
 
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 

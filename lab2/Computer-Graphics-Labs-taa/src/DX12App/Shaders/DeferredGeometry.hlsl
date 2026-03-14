@@ -308,7 +308,9 @@ GBufferData DeferredPS(VertexOut pin)
 
     pout.VelocityBuf = (prevNDC - currentNDC) * gRenderTargetSize;
     pout.VelocityBuf.x *= -1.f;
-    pout.VelocityBuf = (int) pout.VelocityBuf;
+
+    if (length(pout.VelocityBuf) < 0.001f)
+        pout.VelocityBuf = float2(0.0f, 0.0f);
 
     return pout;
 }
