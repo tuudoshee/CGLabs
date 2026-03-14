@@ -1,12 +1,4 @@
-C:\Users\tuudoshee\Downloads\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.dll
-C:\Users\tuudoshee\Downloads\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.pdb
-C:\Users\tuudoshee\Downloads\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.dll
-C:\Users\tuudoshee\Downloads\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.pdb
-C:\Users\tuudoshee\Desktop\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.dll
-C:\Users\tuudoshee\Desktop\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.pdb
-C:\Users\tuudoshee\Desktop\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.dll
-C:\Users\tuudoshee\Desktop\DirectX-Graphics-Samples-master\DirectX-Graphics-Samples-master\Samples\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.pdb
-C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.dll
-C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.pdb
-C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.dll
-C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.pdb
+C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.dll
+C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\D3D12\D3D12Core.pdb
+C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.dll
+C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\D3D12\D3D12SDKLayers.pdb

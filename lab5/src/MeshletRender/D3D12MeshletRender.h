@@ -61,6 +61,7 @@ private:
     ComPtr<ID3D12DescriptorHeap> m_rtvHeap;
     ComPtr<ID3D12DescriptorHeap> m_dsvHeap;
     ComPtr<ID3D12PipelineState> m_pipelineState;
+    ComPtr<ID3D12PipelineState> m_pipelineState_Wire;
     ComPtr<ID3D12Resource> m_constantBuffer;
     UINT m_rtvDescriptorSize;
     UINT m_dsvDescriptorSize;
@@ -80,6 +81,8 @@ private:
     ComPtr<ID3D12Fence> m_fence;
     UINT64 m_fenceValues[FrameCount];
 
+    bool bUseWireframe = false;
+
     void LoadPipeline();
     void LoadAssets();
     void PopulateCommandList();
@@ -90,4 +93,17 @@ private:
     static const wchar_t* c_meshFilename;
     static const wchar_t* c_meshShaderFilename;
     static const wchar_t* c_pixelShaderFilename;
+
+    struct AlbedoBinding
+    {
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> Heap; // shader-visible SRV heap (1 descriptor)
+        Microsoft::WRL::ComPtr<ID3D12Resource> Tex; // default heap texture
+        Microsoft::WRL::ComPtr<ID3D12Resource> Upload; // upload heap staging
+    };
+
+    AlbedoBinding m_albedo;
+    UINT m_cbvSrvUavInc = 0;
+
+    void InitAlbedoResources();
+    void BindAlbedoTexture();
 };

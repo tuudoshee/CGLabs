@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\D3D12MeshletRender.exe</FullPath>
+      <FullPath>C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\D3D12MeshletRender.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\MeshletMS.cso</FullPath>
+      <FullPath>C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\MeshletMS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\tuudoshee\Desktop\D3D12MeshShaders\src\MeshletRender\bin\x64\Debug\MeshletPS.cso</FullPath>
+      <FullPath>C:\Users\tuudoshee\Downloads\3DEditorD3D12-lab5MeshPipeline\3DEditorD3D12-lab5MeshPipeline\src\MeshletRender\bin\x64\Debug\MeshletPS.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
