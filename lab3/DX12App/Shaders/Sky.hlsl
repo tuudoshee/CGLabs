@@ -142,38 +142,59 @@ float3 SkyColor(float3 viewDirW)
 
     float t = saturate(viewDirW.y * 0.5f + 0.5f);
 
-    float3 zenith = float3(0.10f, 0.25f, 0.65f);
-    float3 horizon = float3(0.60f, 0.70f, 0.90f);
+    float daylight = smoothstep(-0.08f, 0.03f, sunDir.y);
+    float sunsetFactor = 1.0f - smoothstep(0.02f, 0.35f, sunDir.y);
 
-    float3 baseSky = lerp(horizon, zenith, t);
+    float3 zenithDay = float3(0.10f, 0.25f, 0.65f);
+    float3 horizonDay = float3(0.60f, 0.70f, 0.90f);
+
+    float3 zenithNight = float3(0.01f, 0.02f, 0.05f);
+    float3 horizonNight = float3(0.03f, 0.04f, 0.07f);
+
+    float3 baseDay = lerp(horizonDay, zenithDay, t);
+    float3 baseNight = lerp(horizonNight, zenithNight, t);
+
+    float3 baseSky = lerp(baseNight, baseDay, daylight);
 
     float sunDisk = pow(saturate(cosTheta), 3000.0f);
     float sunGlow = pow(saturate(cosTheta), 150.0f);
 
-    float3 sunTint = float3(1.0f, 0.9f, 0.75f);
+    float3 sunDay = float3(1.0f, 0.98f, 0.94f);
+    float3 sunSunset = float3(1.0f, 0.45f, 0.25f);
+    float3 sunTint = lerp(sunDay, sunSunset, sunsetFactor);
 
-    float3 sun = (sunDisk * 1.5f + sunGlow * 0.3f) * gSunIntensity * sunTint;
+    float3 sun = (sunDisk * 1.5f + sunGlow * 0.3f) * gSunIntensity * daylight * sunTint;
+    float3 litScatter = scatter * daylight;
 
-    float3 col = baseSky * 0.6f + scatter * 0.4f + sun;
+    float3 col = baseSky * 0.65f + litScatter * 0.5f + sun;
 
     return col * gExposure;
 }
 
 float4 PS(VertexOut pin) : SV_Target
 {
-    // If atmosphere disabled -> old cubemap sky
+    // Обычный cubemap-режим можно оставить как был
     if (gEnableAtmosphere < 0.5f)
     {
-        return gCubeMap.Sample(gsamLinearWrap, pin.DirL);
+        return gCubeMap.Sample(gsamLinearWrap, normalize(pin.DirL));
     }
 
-    // Direction in world space: rotate by inverse view (no translation)
-    float3 viewDirW = normalize(mul(pin.DirL, (float3x3) gInvView));
+    // Восстанавливаем луч из текущего пикселя экрана, а не из грани куба
+    float2 uv = pin.PosH.xy * gInvRenderTargetSize; // 0..1
+    float2 ndc;
+    ndc.x = uv.x * 2.0f - 1.0f;
+    ndc.y = 1.0f - uv.y * 2.0f;
+
+    float4 clipPos = float4(ndc, 1.0f, 1.0f);
+    float4 viewPos = mul(clipPos, gInvProj);
+    float3 viewDirV = normalize(viewPos.xyz / viewPos.w);
+
+    float3 viewDirW = normalize(mul(viewDirV, (float3x3) gInvView));
 
     float3 col = SkyColor(viewDirW);
 
     col = max(col, 0.0f);
-    col = col / (1.0f + col); 
+    col = col / (1.0f + col);
 
     return float4(col, 1.0f);
 }

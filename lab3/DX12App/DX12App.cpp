@@ -7,6 +7,7 @@
 #include "../Common/Camera.h"
 #include "FrameResource.h"
 #include "ShadowMap.h"
+#include <algorithm>
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -19,6 +20,11 @@ using namespace DirectX::PackedVector;
 // #define DEBUG
 
 const int gNumFrameResources = 3;
+
+static float Clamp(float v, float a, float b)
+{
+	return (v < a) ? a : (v > b ? b : v);
+}
 
 enum class RenderLayer : int
 {
@@ -242,10 +248,11 @@ private:
 	bool  mAtmoEnabled = true;
 
 	// --- Sun animation (for sunrise/sunset) ---
-	float mSunAngle = 0.35f;  
-	float mSunAzimuth = 0.25f; 
-	bool  mSunAuto = false;    
-	float mSunSpeed = 0.15f;     
+	float mLatitudeDeg = 55.75f;   
+	int   mDayOfYear = 172;            
+	float mSolarTimeHours = 14.0f;     
+	bool  mSunAuto = true;             
+	float mTimeScaleHoursPerSec = 1.3f;
 
 	static const UINT PaintW = 1024;
 	static const UINT PaintH = 1024;
@@ -399,6 +406,17 @@ void DX12App::Update(const GameTimer& gt)
 {
 	OnKeyboardInput(gt);
 
+	if (mSunAuto)
+	{
+		mSolarTimeHours += gt.DeltaTime() * mTimeScaleHoursPerSec;
+
+		while (mSolarTimeHours >= 24.0f)
+			mSolarTimeHours -= 24.0f;
+
+		while (mSolarTimeHours < 0.0f)
+			mSolarTimeHours += 24.0f;
+	}
+
 	// Cycle through the circular frame resource array.
 	mCurrFrameResourceIndex = (mCurrFrameResourceIndex + 1) % gNumFrameResources;
 	mCurrFrameResource = mFrameResources[mCurrFrameResourceIndex].get();
@@ -423,13 +441,6 @@ void DX12App::Update(const GameTimer& gt)
 	UpdateLightCBs(gt);
 	UpdateMaterialCBs(gt);
 	UpdatePostProcessCB(gt);
-
-	wchar_t caption[256];
-	swprintf_s(caption, L"Atmosphere: dens=%.2f mie=%.2f ray=%.2f g=%.2f %s  (C=Clean, V=Dirty, T=Toggle)",
-		mAtmoDensity, mMieStrength, mRayleighStrength, mMieG,
-		mAtmoEnabled ? L"ON" : L"OFF");
-	SetWindowText(mhMainWnd, caption);
-
 }
 
 void DX12App::Draw(const GameTimer& gt)
@@ -568,55 +579,6 @@ void DX12App::OnKeyboardInput(const GameTimer& gt)
 	);
 
 	OutputDebugStringA(buf);
-	auto clamp = [](float v, float a, float b) { return std::max(a, std::min(v, b)); };
-
-	if (GetAsyncKeyState('T') & 0x0001) mAtmoEnabled = !mAtmoEnabled;
-
-	// Clean preset
-	if (GetAsyncKeyState('C') & 0x8000)
-	{
-		mAtmoDensity = 0.6f;
-		mMieStrength = 0.4f;
-		mRayleighStrength = 1.2f;
-		mMieG = 0.75f;
-		mAtmoExposure = 1.1f;
-	}
-	// Dirty preset
-	if (GetAsyncKeyState('V') & 0x8000)
-	{
-		mAtmoDensity = 2.0f;
-		mMieStrength = 2.2f;
-		mRayleighStrength = 0.7f;
-		mMieG = 0.88f;
-		mAtmoExposure = 1.0f;
-	}
-
-	// Fine controls
-	if (GetAsyncKeyState('1') & 0x8000) mAtmoDensity = clamp(mAtmoDensity - 0.02f, 0.0f, 5.0f);
-	if (GetAsyncKeyState('2') & 0x8000) mAtmoDensity = clamp(mAtmoDensity + 0.02f, 0.0f, 5.0f);
-
-	if (GetAsyncKeyState('3') & 0x8000) mMieStrength = clamp(mMieStrength - 0.02f, 0.0f, 5.0f);
-	if (GetAsyncKeyState('4') & 0x8000) mMieStrength = clamp(mMieStrength + 0.02f, 0.0f, 5.0f);
-
-	if (GetAsyncKeyState('5') & 0x8000) mRayleighStrength = clamp(mRayleighStrength - 0.02f, 0.0f, 5.0f);
-	if (GetAsyncKeyState('6') & 0x8000) mRayleighStrength = clamp(mRayleighStrength + 0.02f, 0.0f, 5.0f);
-
-	if (GetAsyncKeyState('7') & 0x8000) mMieG = clamp(mMieG - 0.002f, 0.60f, 0.95f);
-	if (GetAsyncKeyState('8') & 0x8000) mMieG = clamp(mMieG + 0.002f, 0.60f, 0.95f);
-
-	// --- Sun controls ---
-
-	if (GetAsyncKeyState('R') & 0x0001) mSunAuto = !mSunAuto;
-
-	if (GetAsyncKeyState('I') & 0x8000) mSunAngle += 0.6f * dt; // вверх
-	if (GetAsyncKeyState('K') & 0x8000) mSunAngle -= 0.6f * dt; // вниз
-
-	if (GetAsyncKeyState('J') & 0x8000) mSunAzimuth -= 0.8f * dt;
-	if (GetAsyncKeyState('L') & 0x8000) mSunAzimuth += 0.8f * dt;
-
-	mSunAngle = clamp(mSunAngle, -0.15f, XM_PIDIV2 - 0.05f);
-
-
 
 }
 
@@ -895,19 +857,61 @@ void DX12App::UpdateMainPassCB(const GameTimer& gt)
 	mMainPassCB.TotalTime = gt.TotalTime();
 	mMainPassCB.DeltaTime = gt.DeltaTime();
 
-	float ca = cosf(mSunAngle);
-	float sa = sinf(mSunAngle);
-	float cz = cosf(mSunAzimuth);
-	float sz = sinf(mSunAzimuth);
+	const float DegToRad = XM_PI / 180.0f;
 
-	// направление НА солнце (в небо)
-	DirectX::XMFLOAT3 sunDir(ca * cz, sa, ca * sz);
+	// Широта
+	float phi = mLatitudeDeg * DegToRad;
 
-	// нормализация
-	DirectX::XMVECTOR v = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&sunDir));
-	DirectX::XMStoreFloat3(&mMainPassCB.SunDirW, v);
-	mMainPassCB.SunIntensity = 5.0f;
+	// Склонение солнца по дню года
+	float delta = 23.44f * DegToRad *
+		sinf(2.0f * XM_PI * (284.0f + (float)mDayOfYear) / 365.0f);
 
+	// Часовой угол
+	float H = (mSolarTimeHours - 12.0f) * 15.0f * DegToRad;
+
+	// X = east, Y = up, Z = north
+	float east = -cosf(delta) * sinf(H);
+	float north = cosf(phi) * sinf(delta) - sinf(phi) * cosf(delta) * cosf(H);
+	float up = sinf(phi) * sinf(delta) + cosf(phi) * cosf(delta) * cosf(H);
+
+	DirectX::XMVECTOR sunVec = DirectX::XMVector3Normalize(
+		DirectX::XMVectorSet(east, up, north, 0.0f));
+
+	DirectX::XMStoreFloat3(&mMainPassCB.SunDirW, sunVec);
+
+	float sunHeight = mMainPassCB.SunDirW.y;
+	float daylight = Clamp((sunHeight + 0.10f) / 0.18f, 0.0f, 1.0f);
+	float sunsetFactor = 1.0f - Clamp(sunHeight / 0.35f, 0.0f, 1.0f);
+
+	mMainPassCB.SunIntensity = 6.0f * daylight;
+
+	if (!mAllLights.empty())
+	{
+		auto* sunLight = mAllLights[0].get();
+
+		sunLight->Direction = {
+			-mMainPassCB.SunDirW.x,
+			-mMainPassCB.SunDirW.y,
+			-mMainPassCB.SunDirW.z
+		};
+
+		float directStrength = daylight * (0.25f + 0.75f * Clamp(sunHeight, 0.0f, 1.0f));
+		float intensity = 8.0f * directStrength;
+		sunLight->Strength = { intensity, intensity, intensity };
+
+		DirectX::XMFLOAT3 sunsetColor = { 1.00f, 0.45f, 0.25f };
+		DirectX::XMFLOAT3 dayColor = { 1.00f, 0.98f, 0.95f };
+
+		float tColor = 1.0f - sunsetFactor;
+
+		sunLight->Color = {
+			sunsetColor.x + (dayColor.x - sunsetColor.x) * tColor,
+			sunsetColor.y + (dayColor.y - sunsetColor.y) * tColor,
+			sunsetColor.z + (dayColor.z - sunsetColor.z) * tColor
+		};
+
+		sunLight->NumFramesDirty = gNumFrameResources;
+	}
 
 	mMainPassCB.BetaRayleigh = DirectX::XMFLOAT3(5.5e-6f, 13.0e-6f, 22.4e-6f);
 	mMainPassCB.BetaMie = DirectX::XMFLOAT3(21e-6f, 21e-6f, 21e-6f);
@@ -940,49 +944,11 @@ void DX12App::UpdateSkyBoxRotation()
 
 	using namespace DirectX;
 
-	XMVECTOR target = XMVector3Normalize(XMLoadFloat3(&mMainPassCB.SunDirW));
-	XMVECTOR ref = XMVector3Normalize(XMLoadFloat3(&mSkySunRefDir));
-	XMVECTOR axis = XMVector3Cross(ref, target);
-
-	float d;
-	XMStoreFloat(&d, XMVector3Dot(ref, target));
-	d = std::max(-1.0f, std::min(1.0f, d));
-	float angle = acosf(d);
-
-	float a2;
-	XMStoreFloat(&a2, XMVector3Dot(axis, axis));
-
-	XMMATRIX Ralign = XMMatrixIdentity();
-
-	if (a2 > 1e-8f)
-	{
-		axis = XMVector3Normalize(axis);
-		Ralign = XMMatrixRotationAxis(axis, angle);
-	}
-	else
-	{
-		if (d < -0.999f)
-		{
-			XMVECTOR any = XMVectorSet(0, 1, 0, 0);
-			XMVECTOR altAxis = XMVector3Cross(ref, any);
-			float alt2; XMStoreFloat(&alt2, XMVector3Dot(altAxis, altAxis));
-			if (alt2 < 1e-8f)
-				altAxis = XMVector3Cross(ref, XMVectorSet(1, 0, 0, 0));
-
-			altAxis = XMVector3Normalize(altAxis);
-			Ralign = XMMatrixRotationAxis(altAxis, XM_PI);
-		}
-	}
-
-	XMMATRIX Rroll = XMMatrixRotationAxis(target, mSkyRoll);
 	XMMATRIX S = XMMatrixScaling(5000.0f, 5000.0f, 5000.0f);
-
-	XMStoreFloat4x4(&mSkyRitem->World, S * Rroll * Ralign);
+	XMStoreFloat4x4(&mSkyRitem->World, S);
 
 	mSkyRitem->NumFramesDirty = gNumFrameResources;
 }
-
-
 
 void DX12App::LoadTexture(std::string name, std::wstring filename, TextureType type)
 {

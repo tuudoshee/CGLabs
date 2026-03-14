@@ -1,0 +1,17 @@
+﻿  Camera.cpp
+  d3dApp.cpp
+  d3dUtil.cpp
+  DDSTextureLoader.cpp
+  GameTimer.cpp
+  GeometryGenerator.cpp
+  MathHelper.cpp
+  FrameResource.cpp
+  Gbuffer.cpp
+  ShadowMap.cpp
+  DX12App.cpp
+C:\Users\tuudoshee\Desktop\dop atmosphere\cg_lab-main\cg_lab-main\src\DX12App\DX12App.cpp(1699,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tuudoshee\Desktop\dop atmosphere\cg_lab-main\cg_lab-main\src\DX12App\DX12App.cpp(1703,67): warning C4267: 'argument': conversion from 'size_t' to 'INT', possible loss of data
+C:\Users\tuudoshee\Desktop\dop atmosphere\cg_lab-main\cg_lab-main\src\DX12App\DX12App.cpp(1704,67): warning C4267: 'argument': conversion from 'size_t' to 'INT', possible loss of data
+C:\Users\tuudoshee\Desktop\dop atmosphere\cg_lab-main\cg_lab-main\src\DX12App\DX12App.cpp(1705,49): warning C4267: 'argument': conversion from 'size_t' to 'INT', possible loss of data
+  Generating Code...
+  DX12App.vcxproj -> C:\Users\tuudoshee\Desktop\dop atmosphere\cg_lab-main\cg_lab-main\src\DX12App\x64\Debug\DX12App.exe
