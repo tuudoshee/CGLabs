@@ -1,0 +1,16 @@
+﻿  TexColumnsApp.cpp
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(1040,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(1041,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(1091,21): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(1095,21): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(1236,20): warning C4129: 'A': unrecognized character escape sequence
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2009,35): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2028,35): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2050,33): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2067,34): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2083,37): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2086,21): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(2196,55): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(3254,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumnsApp.cpp(3272,38): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+  TexColumns.vcxproj -> C:\Users\tuudoshee\Downloads\LabsCG2025-rt_shadows_fix\LabsCG2025-rt_shadows_fix\src\Chapter 9 Texturing\TexColumns\TexColumns.exe
